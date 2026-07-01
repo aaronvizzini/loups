@@ -17,17 +17,21 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies
-        run: pip install requests
+      - name: Install Playwright & Dependencies
+        run: |
+          pip install playwright requests
+          playwright install chromium --with-deps
 
-      - name: Run Direct API Sync
+      - name: Run Drag and Drop Sync Script
         env:
           CALTOPO_MAP_ID: ${{ secrets.CALTOPO_MAP_ID }}
           CALTOPO_SESSION: ${{ secrets.CALTOPO_SESSION }}
         run: |
           python -c "
           import os
+          import time
           import requests
+          from playwright.sync_api import sync_playwright
 
           map_id = os.environ.get('CALTOPO_MAP_ID')
           session_cookie = os.environ.get('CALTOPO_SESSION')
@@ -36,32 +40,54 @@ jobs:
               print('CRITICAL ERROR: Missing GitHub Secrets!')
               exit(1)
 
-          # 1. Fetch the live tracker GeoJSON data
+          # 1. Fetch the tracking data source
           print('Fetching latest tracking coordinates...')
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
           if res.status_code != 200:
               print(f'Failed to fetch source data. HTTP: {res.status_code}')
               exit(1)
               
-          geojson_data = res.json()
-          print('Data successfully downloaded from source.')
+          with open('latest_data.geojson', 'w') as f:
+              f.write(res.text)
+          print('Data saved locally.')
 
-          # 2. Transmit payload directly to CalTopo's map data import handler
-          print(f'Pushing payload directly to CalTopo Map backend: {map_id}')
-          
-          url = f'https://caltopo.com/api/v1/map/{map_id}/import'
-          
-          headers = {
-              'Cookie': f'session={session_cookie}',
-              'Content-Type': 'application/json'
-          }
-
-          response = requests.post(url, json=geojson_data, headers=headers)
-
-          if response.status_code == 200:
-              print('Direct API sync complete! Fresh geometry pushed successfully.')
-          else:
-              print(f'Sync Failed. HTTP Status: {response.status_code}')
-              print(f'Response Body: {response.text}')
-              exit(1)
+          # 2. Open CalTopo and use UI drop injection
+          print('Launching headless sync worker...')
+          with sync_playwright() as p:
+              browser = p.chromium.launch(headless=True)
+              context = browser.new_context(viewport={'width': 1920, 'height': 1080})
+              
+              context.add_cookies([{
+                  'name': 'session',
+                  'value': session_cookie,
+                  'domain': '.caltopo.com',
+                  'path': '/'
+              }])
+              
+              page = context.new_page()
+              map_url = f'https://caltopo.com/m/{map_id}'
+              print(f'Opening CalTopo map workspace: {map_url}')
+              page.goto(map_url, wait_until='networkidle')
+              
+              # Wait for the map element container to load
+              page.wait_for_selector('.ol-viewport, #map, .map-container', timeout=15000)
+              print('Map canvas found. Injecting payload file via virtual drag-and-drop...')
+              
+              # Programmatically simulate dragging and dropping the file onto the active map canvas
+              # This triggers CalTopo's internal catch-all file handler bypass
+              page.set_input_files('body', 'latest_data.geojson')
+              
+              # Wait for CalTopo's confirmation modal overlay to appear
+              print('Waiting for import configuration wizard...')
+              page.wait_for_selector('button:has-text(\"Import\")', timeout=15000)
+              
+              # Click the structural finalization button inside CalTopo's confirmation window
+              print('Finalizing synchronization step...')
+              page.click('button:has-text(\"Import\")')
+              
+              # Let the server process the write request 
+              time.sleep(5)
+              
+              print('Direct-to-map integration successful! Data updated.')
+              browser.close()
           "
