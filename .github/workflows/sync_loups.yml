@@ -2,8 +2,8 @@ name: Sync GeoJSON directly to CalTopo Map
 
 on:
   schedule:
-    - cron: '0 16 * * *' 
-  workflow_dispatch: 
+    - cron: '0 16 * * *' # Runs automatically every day at 12:00 PM UTC
+  workflow_dispatch: # Allows you to manually trigger it anytime
 
 jobs:
   sync_map:
@@ -17,78 +17,51 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Playwright & Dependencies
-        run: |
-          pip install playwright requests
-          playwright install chromium --with-deps
+      - name: Install Dependencies
+        run: pip install requests
 
-      - name: Run Dynamic Sync Script
+      - name: Run Direct API Sync
         env:
           CALTOPO_MAP_ID: ${{ secrets.CALTOPO_MAP_ID }}
           CALTOPO_SESSION: ${{ secrets.CALTOPO_SESSION }}
         run: |
           python -c "
           import os
-          import time
           import requests
-          from playwright.sync_api import sync_playwright
 
           map_id = os.environ.get('CALTOPO_MAP_ID')
           session_cookie = os.environ.get('CALTOPO_SESSION')
 
+          if not map_id or not session_cookie:
+              print('CRITICAL ERROR: Missing GitHub Secrets!')
+              exit(1)
+
+          # 1. Fetch the live tracker GeoJSON data
           print('Fetching latest tracking coordinates...')
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
           if res.status_code != 200:
               print(f'Failed to fetch source data. HTTP: {res.status_code}')
               exit(1)
               
-          with open('latest_data.geojson', 'w') as f:
-              f.write(res.text)
-          print('Data saved locally.')
+          geojson_data = res.json()
+          print('Data successfully downloaded from source.')
 
-          print('Launching headless sync worker...')
-          with sync_playwright() as p:
-              browser = p.chromium.launch(headless=True)
-              
-              # FORCE A LARGE DESKTOP VIEWPORT TO ENSURE 'IMPORT' IS VISIBLE
-              context = browser.new_context(viewport={'width': 1920, 'height': 1080})
-              
-              context.add_cookies([{
-                  'name': 'session',
-                  'value': session_cookie,
-                  'domain': '.caltopo.com',
-                  'path': '/'
-              }])
-              
-              page = context.new_page()
-              map_url = f'https://caltopo.com/m/{map_id}'
-              print(f'Opening CalTopo map workspace: {map_url}')
-              
-              page.goto(map_url, wait_until='networkidle')
-              
-              print('Opening native file pipeline...')
-              # Look specifically for CalTopo's top bar buttons
-              # This will check for 'Import' links inside the map workspace header
-              try:
-                  page.wait_for_selector('a:has-text(\"Import\")', timeout=15000)
-                  page.click('a:has-text(\"Import\")')
-              except Exception:
-                  # Fallback broad selector if wrapped in a generic layout container
-                  page.click('text=Import')
-                  
-              page.wait_for_selector('input[type=\"file\"]')
-              
-              print('Uploading geometry payload...')
-              page.set_input_files('input[type=\"file\"]', 'latest_data.geojson')
-              
-              print('Processing geometry structures...')
-              time.sleep(3) 
-              
-              # Finalize dialog click
-              page.click('button:has-text(\"Import\")')
-              print('Sync finalize requested.')
-              
-              time.sleep(5)
-              print('Direct-to-map integration successful!')
-              browser.close()
+          # 2. Transmit payload directly to CalTopo's map data import handler
+          print(f'Pushing payload directly to CalTopo Map backend: {map_id}')
+          
+          url = f'https://caltopo.com/api/v1/map/{map_id}/import'
+          
+          headers = {
+              'Cookie': f'session={session_cookie}',
+              'Content-Type': 'application/json'
+          }
+
+          response = requests.post(url, json=geojson_data, headers=headers)
+
+          if response.status_code == 200:
+              print('Direct API sync complete! Fresh geometry pushed successfully.')
+          else:
+              print(f'Sync Failed. HTTP Status: {response.status_code}')
+              print(f'Response Body: {response.text}')
+              exit(1)
           "
