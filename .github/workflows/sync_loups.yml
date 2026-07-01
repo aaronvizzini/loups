@@ -37,10 +37,9 @@ jobs:
           session_cookie = os.environ.get('CALTOPO_SESSION')
 
           if not map_id or not session_cookie:
-              print('CRITICAL ERROR: Missing GitHub Secrets for CALTOPO_MAP_ID or CALTOPO_SESSION!')
+              print('CRITICAL ERROR: Missing GitHub Secrets!')
               exit(1)
 
-          # Step 1: Download the live tracking source GeoJSON locally
           print('Fetching latest tracking coordinates...')
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
           if res.status_code != 200:
@@ -51,48 +50,56 @@ jobs:
               f.write(res.text)
           print('Data saved locally.')
 
-          # Step 2: Use headless browser to inject data cleanly into the UI
           print('Launching headless sync worker...')
           with sync_playwright() as p:
               browser = p.chromium.launch(headless=True)
-              
-              # Set up a browser context and pass CalTopo your authentication cookie
               context = browser.new_context()
+              
+              # Set the session cookie explicitly for the CalTopo domain
               context.add_cookies([{
                   'name': 'session',
                   'value': session_cookie,
-                  'domain': 'caltopo.com',
+                  'domain': '.caltopo.com',  # Added leading dot for subdomains
                   'path': '/'
               }])
               
               page = context.new_page()
-              
-              # Navigate directly to your specific map
               map_url = f'https://caltopo.com/m/{map_id}'
               print(f'Opening CalTopo map workspace: {map_url}')
-              page.goto(map_url)
-              page.wait_for_load_state('networkidle')
               
-              # Locate and click CalTopo's real internal data handling components
+              page.goto(map_url, wait_until='networkidle')
+              
+              # Debugging check: Confirm we actually loaded the map and not the login wall
+              page_title = page.title()
+              print(f'Loaded Page Title: \"{page_title}\"')
+              if 'Sign In' in page_title or 'Login' in page_title:
+                  print('CRITICAL: CalTopo rejected your CALTOPO_SESSION cookie. Update your GitHub Secret with a fresh cookie value.')
+                  browser.close()
+                  exit(1)
+              
               print('Opening native file pipeline...')
-              page.click('text=Import')
+              # Use CalTopo's top left menu click behavior explicitly
+              # Try top-bar link or side-panel trigger
+              try:
+                  page.wait_for_selector('.ui-btn:has-text(\"Import\")', timeout=10000)
+                  page.click('.ui-btn:has-text(\"Import\")')
+              except Exception:
+                  # Fallback selector if CalTopo structures it inside a menu dropdown
+                  page.click('text=Import')
+                  
               page.wait_for_selector('input[type=\"file\"]')
               
-              # Upload the local geojson directly into CalTopo's importer
               print('Uploading geometry payload...')
               page.set_input_files('input[type=\"file\"]', 'latest_data.geojson')
               
-              # CalTopo processes the file and renders an internal dialog. Click 'Import' inside it.
               print('Processing geometry structures...')
-              time.sleep(2) # Brief rest period allowing CalTopo's parsing canvas to stabilize
+              time.sleep(3) 
               
-              # Click the structural finalization button inside CalTopo's window dialog
+              # Finalize dialog click
               page.click('button:has-text(\"Import\")')
               print('Sync finalize requested.')
               
-              # Wait briefly for server catalog update confirmation
-              time.sleep(4)
-              
-              print('Direct-to-map integration successful! Fresh tracking boundaries have been pushed.')
+              time.sleep(5)
+              print('Direct-to-map integration successful!')
               browser.close()
           "
