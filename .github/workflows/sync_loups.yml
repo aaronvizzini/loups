@@ -1,29 +1,64 @@
-name: Mirror Wolf Tracking Data
+name: Sync GeoJSON to KML
 
 on:
   schedule:
-    - cron: '0 16 * * *' # Runs daily at 12:00 PM UTC
-  workflow_dispatch:
-
-permissions:
-  contents: write
-  pages: write
+    - cron: '0 16 * * *' # Runs automatically every day at 12:00 PM UTC
+  workflow_dispatch: # Allows you to manually trigger it anytime
 
 jobs:
-  mirror_data:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download Latest GeoJSON
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-numeric: '3.10'
+
+      - name: Install dependencies
+        run: pip install simplekml requests
+
+      - name: Run Data Conversion
         run: |
-          curl -s "https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson" -o wolf_tracker.geojson
+          python -c "
+          import requests
+          import simplekml
+          import json
+
+          # Fetch the raw CDFW data
+          res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
+          data = res.json()
+
+          kml = simplekml.Kml()
+
+          for feature in data['features']:
+              props = feature['properties']
+              geom = feature['geometry']
+              
+              if geom['type'] == 'Polygon':
+                  # Format properties for the CalTopo label
+                  pack_name = props.get('pack', 'Unknown Pack')
+                  date_updated = props.get('most_recent_adj', 'N/A')
+                  
+                  # Create polygon in KML
+                  # GeoJSON uses [Lon, Lat] -> KML simplekml uses [(Lon, Lat), ...]
+                  coords = [tuple(coord) for coord in geom['coordinates'][0]]
+                  poly = kml.newpolygon(name=pack_name, description=f'Last Adjusted: {date_updated}', outerboundaryis=coords)
+                  
+                  # Style the boundary semi-transparent purple/pink
+                  poly.style.polystyle.color = '33a000a0' # Hex color formatting AABBGGRR
+                  poly.style.linestyle.color = 'ffa000a0'
+                  poly.style.linestyle.width = 3
+
+          kml.save('loups_live.kml')
+          "
 
       - name: Commit and Push Changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add wolf_tracker.geojson
-          git diff-index --quiet HEAD || git commit -m "Automated update of wolf tracking data"
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add loups_live.kml
+          git commit -m "Automated update of wolf tracking data" || exit 0
           git push
