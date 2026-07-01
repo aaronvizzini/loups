@@ -2,8 +2,8 @@ name: Sync GeoJSON directly to CalTopo Map
 
 on:
   schedule:
-    - cron: '0 16 * * *' # Runs automatically every day at 12:00 PM UTC
-  workflow_dispatch: # Allows you to manually trigger it anytime
+    - cron: '0 16 * * *' 
+  workflow_dispatch: 
 
 jobs:
   sync_map:
@@ -36,10 +36,6 @@ jobs:
           map_id = os.environ.get('CALTOPO_MAP_ID')
           session_cookie = os.environ.get('CALTOPO_SESSION')
 
-          if not map_id or not session_cookie:
-              print('CRITICAL ERROR: Missing GitHub Secrets!')
-              exit(1)
-
           print('Fetching latest tracking coordinates...')
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
           if res.status_code != 200:
@@ -53,13 +49,14 @@ jobs:
           print('Launching headless sync worker...')
           with sync_playwright() as p:
               browser = p.chromium.launch(headless=True)
-              context = browser.new_context()
               
-              # Set the session cookie explicitly for the CalTopo domain
+              # FORCE A LARGE DESKTOP VIEWPORT TO ENSURE 'IMPORT' IS VISIBLE
+              context = browser.new_context(viewport={'width': 1920, 'height': 1080})
+              
               context.add_cookies([{
                   'name': 'session',
                   'value': session_cookie,
-                  'domain': '.caltopo.com',  # Added leading dot for subdomains
+                  'domain': '.caltopo.com',
                   'path': '/'
               }])
               
@@ -69,22 +66,14 @@ jobs:
               
               page.goto(map_url, wait_until='networkidle')
               
-              # Debugging check: Confirm we actually loaded the map and not the login wall
-              page_title = page.title()
-              print(f'Loaded Page Title: \"{page_title}\"')
-              if 'Sign In' in page_title or 'Login' in page_title:
-                  print('CRITICAL: CalTopo rejected your CALTOPO_SESSION cookie. Update your GitHub Secret with a fresh cookie value.')
-                  browser.close()
-                  exit(1)
-              
               print('Opening native file pipeline...')
-              # Use CalTopo's top left menu click behavior explicitly
-              # Try top-bar link or side-panel trigger
+              # Look specifically for CalTopo's top bar buttons
+              # This will check for 'Import' links inside the map workspace header
               try:
-                  page.wait_for_selector('.ui-btn:has-text(\"Import\")', timeout=10000)
-                  page.click('.ui-btn:has-text(\"Import\")')
+                  page.wait_for_selector('a:has-text(\"Import\")', timeout=15000)
+                  page.click('a:has-text(\"Import\")')
               except Exception:
-                  # Fallback selector if CalTopo structures it inside a menu dropdown
+                  # Fallback broad selector if wrapped in a generic layout container
                   page.click('text=Import')
                   
               page.wait_for_selector('input[type=\"file\"]')
