@@ -17,21 +17,18 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Playwright & Dependencies
-        run: |
-          pip install playwright requests
-          playwright install chromium --with-deps
+      - name: Install Dependencies
+        run: pip install requests
 
-      - name: Run Drag and Drop Sync Script
+      - name: Run Multipart Form Sync
         env:
           CALTOPO_MAP_ID: ${{ secrets.CALTOPO_MAP_ID }}
           CALTOPO_SESSION: ${{ secrets.CALTOPO_SESSION }}
         run: |
           python -c "
           import os
-          import time
+          import re
           import requests
-          from playwright.sync_api import sync_playwright
 
           map_id = os.environ.get('CALTOPO_MAP_ID')
           session_cookie = os.environ.get('CALTOPO_SESSION')
@@ -40,54 +37,52 @@ jobs:
               print('CRITICAL ERROR: Missing GitHub Secrets!')
               exit(1)
 
-          # 1. Fetch the tracking data source
+          # 1. Fetch live wolf tracking data
           print('Fetching latest tracking coordinates...')
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
           if res.status_code != 200:
               print(f'Failed to fetch source data. HTTP: {res.status_code}')
               exit(1)
-              
-          with open('latest_data.geojson', 'w') as f:
-              f.write(res.text)
-          print('Data saved locally.')
+          geojson_content = res.text
 
-          # 2. Open CalTopo and use UI drop injection
-          print('Launching headless sync worker...')
-          with sync_playwright() as p:
-              browser = p.chromium.launch(headless=True)
-              context = browser.new_context(viewport={'width': 1920, 'height': 1080})
+          # 2. Establish session and pull the required browser Window ID
+          print('Authenticating and initializing sync wrapper token...')
+          session = requests.Session()
+          session.cookies.set('session', session_cookie, domain='.caltopo.com')
+          
+          # Hit the map workspace page to fetch environmental variables 
+          map_page = session.get(f'https://caltopo.com/m/{map_id}')
+          
+          # CalTopo embeds a dynamic windowId string in its page initialization variables
+          window_id_match = re.search(r'windowId\s*:\s*[\'\"]([^\'\"]+)[\'\"]', map_page.text)
+          if not window_id_match:
+              print('CRITICAL: Could not resolve workspace verification tokens. Ensure your CALTOPO_SESSION secret is fresh.')
+              exit(1)
               
-              context.add_cookies([{
-                  'name': 'session',
-                  'value': session_cookie,
-                  'domain': '.caltopo.com',
-                  'path': '/'
-              }])
-              
-              page = context.new_page()
-              map_url = f'https://caltopo.com/m/{map_id}'
-              print(f'Opening CalTopo map workspace: {map_url}')
-              page.goto(map_url, wait_until='networkidle')
-              
-              # Wait for the map element container to load
-              page.wait_for_selector('.ol-viewport, #map, .map-container', timeout=15000)
-              print('Map canvas found. Injecting payload file via virtual drag-and-drop...')
-              
-              # Programmatically simulate dragging and dropping the file onto the active map canvas
-              # This triggers CalTopo's internal catch-all file handler bypass
-              page.set_input_files('body', 'latest_data.geojson')
-              
-              # Wait for CalTopo's confirmation modal overlay to appear
-              print('Waiting for import configuration wizard...')
-              page.wait_for_selector('button:has-text(\"Import\")', timeout=15000)
-              
-              # Click the structural finalization button inside CalTopo's confirmation window
-              print('Finalizing synchronization step...')
-              page.click('button:has-text(\"Import\")')
-              
-              # Let the server process the write request 
-              time.sleep(5)
-              
-              print('Direct-to-map integration successful! Data updated.')
-              browser.close()
+          window_id = window_id_match.group(1)
+          print(f'Sync pipeline verified. Active Window ID: {window_id}')
+
+          # 3. Emulate a standard browser file drop form action
+          upload_url = 'https://caltopo.com/gpx/importGPX'
+          
+          form_data = {
+              'mapId': map_id,
+              'windowId': window_id,
+              'json': 'true'
+          }
+          
+          # Pass the GeoJSON payload raw inside a standard file upload block
+          files = {
+              'gpxFile': ('wolf_tracker.geojson', geojson_content, 'application/json')
+          }
+
+          print('Transmitting map data geometry...')
+          response = session.post(upload_url, data=form_data, files=files)
+
+          if response.status_code == 200 and '\"status\":\"ok\"' in response.text.lower():
+              print('Direct-to-map integration successful! Fresh geometry pushed successfully.')
+          else:
+              print(f'Sync Form Transmission Failed. Status: {response.status_code}')
+              print(f'Server Output: {response.text}')
+              exit(1)
           "
