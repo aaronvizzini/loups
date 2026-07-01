@@ -1,88 +1,29 @@
-name: Sync GeoJSON directly to CalTopo Map
+name: Mirror Wolf Tracking Data
 
 on:
   schedule:
-    - cron: '0 16 * * *' # Runs automatically every day at 12:00 PM UTC
-  workflow_dispatch: # Allows you to manually trigger it anytime
+    - cron: '0 16 * * *' # Runs daily at 12:00 PM UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
 
 jobs:
-  sync_map:
+  mirror_data:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install Dependencies
-        run: pip install requests
-
-      - name: Run Multipart Form Sync
-        env:
-          CALTOPO_MAP_ID: ${{ secrets.CALTOPO_MAP_ID }}
-          CALTOPO_SESSION: ${{ secrets.CALTOPO_SESSION }}
+      - name: Download Latest GeoJSON
         run: |
-          python -c "
-          import os
-          import re
-          import requests
+          curl -s "https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson" -o wolf_tracker.geojson
 
-          map_id = os.environ.get('CALTOPO_MAP_ID')
-          session_cookie = os.environ.get('CALTOPO_SESSION')
-
-          if not map_id or not session_cookie:
-              print('CRITICAL ERROR: Missing GitHub Secrets!')
-              exit(1)
-
-          # 1. Fetch live wolf tracking data
-          print('Fetching latest tracking coordinates...')
-          res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
-          if res.status_code != 200:
-              print(f'Failed to fetch source data. HTTP: {res.status_code}')
-              exit(1)
-          geojson_content = res.text
-
-          # 2. Establish session and pull the required browser Window ID
-          print('Authenticating and initializing sync wrapper token...')
-          session = requests.Session()
-          session.cookies.set('session', session_cookie, domain='.caltopo.com')
-          
-          # Hit the map workspace page to fetch environmental variables 
-          map_page = session.get(f'https://caltopo.com/m/{map_id}')
-          
-          # CalTopo embeds a dynamic windowId string in its page initialization variables
-          window_id_match = re.search(r'windowId\s*:\s*[\'\"]([^\'\"]+)[\'\"]', map_page.text)
-          if not window_id_match:
-              print('CRITICAL: Could not resolve workspace verification tokens. Ensure your CALTOPO_SESSION secret is fresh.')
-              exit(1)
-              
-          window_id = window_id_match.group(1)
-          print(f'Sync pipeline verified. Active Window ID: {window_id}')
-
-          # 3. Emulate a standard browser file drop form action
-          upload_url = 'https://caltopo.com/gpx/importGPX'
-          
-          form_data = {
-              'mapId': map_id,
-              'windowId': window_id,
-              'json': 'true'
-          }
-          
-          # Pass the GeoJSON payload raw inside a standard file upload block
-          files = {
-              'gpxFile': ('wolf_tracker.geojson', geojson_content, 'application/json')
-          }
-
-          print('Transmitting map data geometry...')
-          response = session.post(upload_url, data=form_data, files=files)
-
-          if response.status_code == 200 and '\"status\":\"ok\"' in response.text.lower():
-              print('Direct-to-map integration successful! Fresh geometry pushed successfully.')
-          else:
-              print(f'Sync Form Transmission Failed. Status: {response.status_code}')
-              print(f'Server Output: {response.text}')
-              exit(1)
-          "
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add wolf_tracker.geojson
+          git diff-index --quiet HEAD || git commit -m "Automated update of wolf tracking data"
+          git push
