@@ -120,7 +120,7 @@
         </Style>
         <Placemark id="3">
             <name>CA091 (previously Yowlumni Disperser)</name>
-            <description>Last Adjusted: 07/26/2026</description>
+            <description>Last Adjusted: 07/27/2026</description>
             <styleUrl>#6</styleUrl>
             <Polygon id="2">
                 <outerBoundaryIs>
@@ -137,7 +137,7 @@
             <Polygon id="9">
                 <outerBoundaryIs>
                     <LinearRing id="11">
-                        <coordinates>-121.20173769171,40.3604280957933,0.0 -121.16906756120268,40.38468826534612,0.0 -121.17914208323528,40.416938058362724,0.0 -121.22190518974901,40.42491963190156,0.0 -121.2545657036852,40.40065385075787,0.0 -121.24447274533357,40.368412111758936,0.0 -121.20173769171,40.3604280957933,0.0</coordinates>
+                        <coordinates>-121.17914208323528,40.416938058362724,0.0 -121.14644360824141,40.44118560480211,0.0 -121.15651782319367,40.47342033067273,0.0 -121.19930900608881,40.48139948102765,0.0 -121.23199787997183,40.45714632459016,0.0 -121.22190518974901,40.42491963190156,0.0 -121.17914208323528,40.416938058362724,0.0</coordinates>
                     </LinearRing>
                 </outerBoundaryIs>
             </Polygon>
@@ -168,7 +168,7 @@
         </Placemark>
         <Placemark id="31">
             <name>CA124 (previously Whaleback Disperser 2)</name>
-            <description>Last Adjusted: 07/19/2026</description>
+            <description>Last Adjusted: 07/27/2026</description>
             <styleUrl>#34</styleUrl>
             <Polygon id="30">
                 <outerBoundaryIs>
@@ -179,8 +179,8 @@
             </Polygon>
         </Placemark>
         <Placemark id="38">
-            <name>CA127 (previously Whaleback 2)</name>
-            <description>Last Adjusted: 07/26/2026</description>
+            <name>CA039 (previously Whaleback 1)</name>
+            <description>Last Adjusted: 07/27/2026</description>
             <styleUrl>#41</styleUrl>
             <Polygon id="37">
                 <outerBoundaryIs>
@@ -191,7 +191,7 @@
             </Polygon>
         </Placemark>
         <Placemark id="45">
-            <name>CA147 (previously Whaleback 4)</name>
+            <name>CA121 (previously Whaleback Disperser 1)</name>
             <description>Last Adjusted: 07/27/2026</description>
             <styleUrl>#48</styleUrl>
             <Polygon id="44">
@@ -203,8 +203,8 @@
             </Polygon>
         </Placemark>
         <Placemark id="52">
-            <name>CA121 (previously Whaleback Disperser 1)</name>
-            <description>Last Adjusted: 07/26/2026</description>
+            <name>CA147 (previously Whaleback 4)</name>
+            <description>Last Adjusted: 07/27/2026</description>
             <styleUrl>#55</styleUrl>
             <Polygon id="51">
                 <outerBoundaryIs>
@@ -215,7 +215,7 @@
             </Polygon>
         </Placemark>
         <Placemark id="59">
-            <name>CA039 (previously Whaleback 1)</name>
+            <name>CA127 (previously Whaleback 2)</name>
             <description>Last Adjusted: 07/27/2026</description>
             <styleUrl>#62</styleUrl>
             <Polygon id="58">
