@@ -120,7 +120,7 @@
         </Style>
         <Placemark id="3">
             <name>CA091 (previously Yowlumni Disperser)</name>
-            <description>Last Adjusted: 07/29/2026</description>
+            <description>Last Adjusted: 07/30/2026</description>
             <styleUrl>#6</styleUrl>
             <Polygon id="2">
                 <outerBoundaryIs>
@@ -156,7 +156,7 @@
         </Placemark>
         <Placemark id="24">
             <name>CA077; pack origin: Whaleback</name>
-            <description>Last Adjusted: 07/28/2026</description>
+            <description>Last Adjusted: 07/30/2026</description>
             <styleUrl>#27</styleUrl>
             <Polygon id="23">
                 <outerBoundaryIs>
