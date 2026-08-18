@@ -2,7 +2,7 @@ name: Sync GeoJSON to KML
 
 on:
   schedule:
-    - cron: '0 16 * * *' # Runs automatically every day at 12:00 PM UTC
+    - cron: '0 15,22 * * *'
   workflow_dispatch: # Allows you to manually trigger it anytime
 
 jobs:
