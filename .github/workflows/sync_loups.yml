@@ -15,14 +15,14 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-numeric: '3.10'
+          python-version: '3.10'
 
       - name: Install dependencies
         run: pip install simplekml requests
 
       - name: Run Data Conversion
         run: |
-          python -c "
+          python - << 'EOF'
           import requests
           import simplekml
           import json
@@ -54,8 +54,8 @@ jobs:
                   poly.style.linestyle.width = 3
 
           kml.save('w_live.kml')
-          kml.save(datetime.datetime.now().strftime('%m-%d-%Y_%H-%M-%S') + ".kml")
-          "
+          kml.save(datetime.datetime.now().strftime('%m-%d-%Y_%H-%M-%S') + '.kml')
+          EOF
 
       - name: Commit and Push Changes
         run: |
