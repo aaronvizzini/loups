@@ -54,7 +54,7 @@ jobs:
                   poly.style.linestyle.width = 3
 
           kml.save('w_live.kml')
-          kml.save(datetime.datetime.now().strftime("%m:%d:%Y:%H:%M:%S")+'.kml')
+          kml.save(datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S") + ".kml")
           "
 
       - name: Commit and Push Changes
