@@ -26,6 +26,7 @@ jobs:
           import requests
           import simplekml
           import json
+          import datetime
 
           # Fetch the raw CDFW data
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
@@ -53,12 +54,13 @@ jobs:
                   poly.style.linestyle.width = 3
 
           kml.save('w_live.kml')
+          kml.save(datetime.datetime.now()+'.kml')
           "
 
       - name: Commit and Push Changes
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
-          git add w_live.kml
+          git add '*.kml'
           git commit -m "Automated update of wolf tracking data" || exit 0
           git push
