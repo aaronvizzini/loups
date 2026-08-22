@@ -27,6 +27,7 @@ jobs:
           import simplekml
           import json
           import datetime
+          import os
 
           # Fetch the raw CDFW data
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
@@ -53,6 +54,7 @@ jobs:
                   poly.style.linestyle.color = 'ffa000a0'
                   poly.style.linestyle.width = 3
 
+          os.makedirs('kmls', exist_ok=True)
           kml.save('w_live.kml')
           kml.save(os.path.join('kmls', datetime.datetime.now().strftime('%m-%d-%Y_%H-%M-%S') + '.kml'))
           EOF
