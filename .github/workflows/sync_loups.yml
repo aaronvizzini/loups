@@ -3,7 +3,7 @@ name: Sync GeoJSON to KML
 on:
   schedule:
     - cron: '0 15,22 * * *'
-  workflow_dispatch:
+  workflow_dispatch: # Allows you to manually trigger it anytime
 
 jobs:
   build:
@@ -29,72 +29,30 @@ jobs:
           import datetime
           import os
 
-          # Fetch raw CDFW data
+          # Fetch the raw CDFW data
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
           data = res.json()
 
           kml = simplekml.Kml()
 
-          # Folder structure for CalTopo / Google Earth layer toggling
-          folder_day = kml.newfolder(name="Day Range")
-          folder_night = kml.newfolder(name="Night Range")
-          folder_both = kml.newfolder(name="Both / Combined")
-
-          for feature in data.get('features', []):
-              props = feature.get('properties', {})
-              geom = feature.get('geometry', {})
-              geom_type = geom.get('type')
-
-              # Direct key extractions from GeoJSON schema
-              name = props.get('name', 'Unknown Wolf')
-              pack_origin = props.get('pack_origin', 'N/A')
-              date_updated = props.get('most_recent_adj', 'N/A')
-              time_of_day = props.get('time_of_day', 'both')
-
-              tod_clean = str(time_of_day).strip().lower()
-
-              desc = (
-                  f"Name: {name}\n"
-                  f"Pack Origin: {pack_origin}\n"
-                  f"Most Recent Adj: {date_updated}\n"
-                  f"Time of Day: {time_of_day}"
-              )
-
-              label_name = f"{name} ({str(time_of_day).capitalize()})"
-
-              # Assign target folder layer
-              if tod_clean == 'day':
-                  target_folder = folder_day
-              elif tod_clean == 'night':
-                  target_folder = folder_night
-              else:
-                  target_folder = folder_both
-
-              # Normalize geometry rings across Polygon and MultiPolygon
-              rings = []
-              if geom_type == 'Polygon' and geom.get('coordinates'):
-                  rings = [geom['coordinates'][0]]
-              elif geom_type == 'MultiPolygon' and geom.get('coordinates'):
-                  rings = [p[0] for p in geom['coordinates']]
-
-              for ring in rings:
-                  coords = [(coord[0], coord[1]) for coord in ring]
-                  poly = target_folder.newpolygon(name=label_name, description=desc, outerboundaryis=coords)
+          for feature in data['features']:
+              props = feature['properties']
+              geom = feature['geometry']
+              
+              if geom['type'] == 'Polygon':
+                  # Format properties for the CalTopo label
+                  pack_name = props.get('pack', 'Unknown Pack')
+                  date_updated = props.get('most_recent_adj', 'N/A')
                   
-                  # KML Hex color format: AABBGGRR
-                  if tod_clean == 'day':
-                      poly.style.polystyle.color = '3300aa00'  # Green fill
-                      poly.style.linestyle.color = 'ff00aa00'  # Green border
-                  elif tod_clean == 'night':
-                      poly.style.polystyle.color = '33a000a0'  # Purple fill
-                      poly.style.linestyle.color = 'ffa000a0'  # Purple border
-                  else:
-                      poly.style.polystyle.color = '3300aa00'  # Green fill
-                      poly.style.linestyle.color = 'ffa000a0'  # Purple border
-
+                  # Create polygon in KML
+                  # GeoJSON uses [Lon, Lat] -> KML simplekml uses [(Lon, Lat), ...]
+                  coords = [tuple(coord) for coord in geom['coordinates'][0]]
+                  poly = kml.newpolygon(name=pack_name, description=f'Last Adjusted: {date_updated}', outerboundaryis=coords)
+                  
+                  # Style the boundary semi-transparent purple/pink
+                  poly.style.polystyle.color = '33a000a0' # Hex color formatting AABBGGRR
+                  poly.style.linestyle.color = 'ffa000a0'
                   poly.style.linestyle.width = 3
-                  poly.style.polystyle.fill = 1
-                  poly.style.polystyle.outline = 1
 
           os.makedirs('kmls', exist_ok=True)
           kml.save('w_live.kml')
