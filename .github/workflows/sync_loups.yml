@@ -29,24 +29,38 @@ jobs:
           import datetime
           import os
 
-          # Fetch the raw CDFW data
+          # Fetch raw CDFW data
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
           data = res.json()
 
           kml = simplekml.Kml()
 
-          for feature in data['features']:
-              props = feature['properties']
-              geom = feature['geometry']
+          # Helper to safely extract properties across key casing and null values
+          def get_val(props, keys, default='N/A'):
+              if not isinstance(props, dict):
+                  return default
+              for k in keys:
+                  for p_k, p_v in props.items():
+                      if p_k.lower() == k.lower() and p_v is not None:
+                          val_str = str(p_v).strip()
+                          if val_str:
+                              return val_str
+              return default
+
+          for feature in data.get('features', []):
+              props = feature.get('properties', {})
+              geom = feature.get('geometry', {})
               
-              if geom['type'] == 'Polygon':
-                  # Format properties for CalTopo
-                  name = props.get('name', 'Unknown Wolf')
-                  pack_origin = props.get('pack_origin', 'Unknown Origin')
-                  date_updated = props.get('most_recent_adj', 'N/A')
-                  time_of_day = props.get('time_of_day', 'N/A')
-                  
-                  # Detailed description tag
+              if geom.get('type') == 'Polygon':
+                  # Extract properties safely
+                  name = get_val(props, ['name', 'pack', 'title', 'id'], default='Unknown Wolf')
+                  pack_origin = get_val(props, ['pack_origin', 'pack', 'origin'], default='N/A')
+                  date_updated = get_val(props, ['most_recent_adj', 'date', 'updated'], default='N/A')
+                  time_of_day = get_val(props, ['time_of_day', 'tod', 'time'], default='both')
+
+                  tod_clean = time_of_day.lower()
+
+                  # Formatted description block
                   desc = (
                       f"Name: {name}\n"
                       f"Pack Origin: {pack_origin}\n"
@@ -54,28 +68,31 @@ jobs:
                       f"Time of Day: {time_of_day}"
                   )
                   
-                  # Append time_of_day to label so CalTopo treats Day and Night entries as separate features
-                  label_name = f"{name} ({time_of_day})"
+                  # Unique name suffix ensures CalTopo displays Day and Night entries separately
+                  label_name = f"{name} ({time_of_day.capitalize()})"
 
-                  # Create polygon in KML
-                  coords = [tuple(coord) for coord in geom['coordinates'][0]]
+                  # GeoJSON [Lon, Lat] -> KML [(Lon, Lat), ...]
+                  coords = [tuple(coord[:2]) for coord in geom['coordinates'][0]]
                   poly = kml.newpolygon(name=label_name, description=desc, outerboundaryis=coords)
                   
-                  # Styling (KML AABBGGRR hex format)
-                  # Green: fill '3300a000', border 'ff00a000'
-                  # Purple: fill '33a000a0', border 'ffa000a0'
-                  if time_of_day == 'day':
-                      poly.style.polystyle.color = '3300a000' # Green fill
-                      poly.style.linestyle.color = 'ff00a000' # Green border
+                  # KML Hex color format: AABBGGRR (Alpha, Blue, Green, Red)
+                  # Green: Fill '3300aa00', Line 'ff00aa00'
+                  # Purple: Fill '33a000a0', Line 'ffa000a0'
+                  if tod_clean == 'day':
+                      poly.style.polystyle.color = '3300aa00'  # Green fill
+                      poly.style.linestyle.color = 'ff00aa00'  # Green border
                       poly.style.linestyle.width = 3
-                  elif time_of_day == 'night':
-                      poly.style.polystyle.color = '33a000a0' # Purple fill
-                      poly.style.linestyle.color = 'ffa000a0' # Purple border
+                  elif tod_clean == 'night':
+                      poly.style.polystyle.color = '33a000a0'  # Purple fill
+                      poly.style.linestyle.color = 'ffa000a0'  # Purple border
                       poly.style.linestyle.width = 3
-                  elif time_of_day == 'both':
-                      poly.style.polystyle.color = '3300a000' # Green fill
-                      poly.style.linestyle.color = 'ffa000a0' # Purple border
+                  else:  # 'both' or fallback
+                      poly.style.polystyle.color = '3300aa00'  # Green fill
+                      poly.style.linestyle.color = 'ffa000a0'  # Purple border
                       poly.style.linestyle.width = 3
+
+                  poly.style.polystyle.fill = 1
+                  poly.style.polystyle.outline = 1
 
           os.makedirs('kmls', exist_ok=True)
           kml.save('w_live.kml')
