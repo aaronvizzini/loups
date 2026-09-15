@@ -35,24 +35,55 @@ jobs:
 
           kml = simplekml.Kml()
 
+          # KML color format is AABBGGRR (Alpha, Blue, Green, Red)
+          COLOR_GREEN_FILL = '3300aa00'    # Semi-transparent green
+          COLOR_GREEN_LINE = 'ff00aa00'    # Opaque green
+          COLOR_PURPLE_FILL = '33a000a0'   # Semi-transparent purple
+          COLOR_PURPLE_LINE = 'ffa000a0'   # Opaque purple
+
           for feature in data['features']:
               props = feature['properties']
               geom = feature['geometry']
               
               if geom['type'] == 'Polygon':
-                  # Format properties for the CalTopo label
-                  pack_name = props.get('pack', 'Unknown Pack')
+                  # Extract properties with fallback defaults
+                  name = props.get('name', 'Unknown Wolf')
+                  pack_origin = props.get('pack_origin', 'Unknown Origin')
                   date_updated = props.get('most_recent_adj', 'N/A')
+                  time_of_day = props.get('time_of_day', 'N/A')
                   
-                  # Create polygon in KML
-                  # GeoJSON uses [Lon, Lat] -> KML simplekml uses [(Lon, Lat), ...]
+                  # Format description text block
+                  description_text = (
+                      f"Name: {name}\n"
+                      f"Pack Origin: {pack_origin}\n"
+                      f"Most Recent Adj: {date_updated}\n"
+                      f"Time of Day: {time_of_day}"
+                  )
+
+                  # SimpleKML expects [(Lon, Lat), ...] coordinates
                   coords = [tuple(coord) for coord in geom['coordinates'][0]]
-                  poly = kml.newpolygon(name=pack_name, description=f'Last Adjusted: {date_updated}', outerboundaryis=coords)
+                  poly = kml.newpolygon(
+                      name=name,
+                      description=description_text,
+                      outerboundaryis=coords
+                  )
                   
-                  # Style the boundary semi-transparent purple/pink
-                  poly.style.polystyle.color = '33a000a0' # Hex color formatting AABBGGRR
-                  poly.style.linestyle.color = 'ffa000a0'
-                  poly.style.linestyle.width = 3
+                  # Apply styles based on time_of_day value
+                  if time_of_day == 'day':
+                      # Green fill with green border
+                      poly.style.polystyle.color = COLOR_GREEN_FILL
+                      poly.style.linestyle.color = COLOR_GREEN_LINE
+                      poly.style.linestyle.width = 2
+                  elif time_of_day == 'night':
+                      # Purple fill with purple border
+                      poly.style.polystyle.color = COLOR_PURPLE_FILL
+                      poly.style.linestyle.color = COLOR_PURPLE_LINE
+                      poly.style.linestyle.width = 2
+                  elif time_of_day == 'both':
+                      # Green fill with purple border
+                      poly.style.polystyle.color = COLOR_GREEN_FILL
+                      poly.style.linestyle.color = COLOR_PURPLE_LINE
+                      poly.style.linestyle.width = 3
 
           os.makedirs('kmls', exist_ok=True)
           kml.save('w_live.kml')
