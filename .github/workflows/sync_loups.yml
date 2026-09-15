@@ -3,7 +3,7 @@ name: Sync GeoJSON to KML
 on:
   schedule:
     - cron: '0 15,22 * * *'
-  workflow_dispatch: # Allows you to manually trigger it anytime
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,65 +25,87 @@ jobs:
           python - << 'EOF'
           import requests
           import simplekml
-          import json
           import datetime
           import os
 
-          # Fetch the raw CDFW data
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
           data = res.json()
-
           kml = simplekml.Kml()
 
-          # KML color format is AABBGGRR (Alpha, Blue, Green, Red)
-          COLOR_GREEN_FILL = '3300aa00'    # Semi-transparent green
-          COLOR_GREEN_LINE = 'ff00aa00'    # Opaque green
-          COLOR_PURPLE_FILL = '33a000a0'   # Semi-transparent purple
-          COLOR_PURPLE_LINE = 'ffa000a0'   # Opaque purple
+          for feature in data.get('features', []):
+              props = feature.get('properties', {})
+              geom = feature.get('geometry', {})
 
-          for feature in data['features']:
-              props = feature['properties']
-              geom = feature['geometry']
+              if not geom or geom.get('type') != 'Polygon':
+                  continue
+
+              # Robustly handle missing or null keys
+              name = props.get('name') or props.get('Name') or 'Unknown Polygon'
+              pack_origin = props.get('pack_origin') or props.get('Pack_Origin') or 'Unknown Origin'
+              date_updated = props.get('most_recent_adj') or props.get('Most_Recent_Adj') or 'N/A'
               
-              if geom['type'] == 'Polygon':
-                  # Extract properties with fallback defaults
-                  name = props.get('name', 'Unknown Wolf')
-                  pack_origin = props.get('pack_origin', 'Unknown Origin')
-                  date_updated = props.get('most_recent_adj', 'N/A')
-                  time_of_day = props.get('time_of_day', 'N/A')
-                  
-                  # Format description text block
-                  description_text = (
-                      f"Name: {name}\n"
-                      f"Pack Origin: {pack_origin}\n"
-                      f"Most Recent Adj: {date_updated}\n"
-                      f"Time of Day: {time_of_day}"
-                  )
+              raw_tod = props.get('time_of_day') or props.get('Time_Of_Day') or ''
+              tod_clean = str(raw_tod).strip().lower()
 
-                  # SimpleKML expects [(Lon, Lat), ...] coordinates
-                  coords = [tuple(coord) for coord in geom['coordinates'][0]]
-                  poly = kml.newpolygon(
-                      name=name,
-                      description=description_text,
-                      outerboundaryis=coords
-                  )
-                  
-                  # Apply styles based on time_of_day value
-                  if time_of_day == 'day':
-                      # Green fill with green border
-                      poly.style.polystyle.color = COLOR_GREEN_FILL
-                      poly.style.linestyle.color = COLOR_GREEN_LINE
-                      poly.style.linestyle.width = 2
-                  elif time_of_day == 'night':
-                      # Purple fill with purple border
-                      poly.style.polystyle.color = COLOR_PURPLE_FILL
-                      poly.style.linestyle.color = COLOR_PURPLE_LINE
-                      poly.style.linestyle.width = 2
-                  elif time_of_day == 'both':
-                      # Green fill with purple border
-                      poly.style.polystyle.color = COLOR_GREEN_FILL
-                      poly.style.linestyle.color = COLOR_PURPLE_LINE
-                      poly.style.linestyle.width = 3
+              # Append time of day to the title so CalTopo doesn't overwrite duplicate names
+              display_name = f"{name} ({raw_tod})" if raw_tod else name
+
+              # Format description block
+              description_text = (
+                  f"Name: {name}\n"
+                  f"Pack Origin: {pack_origin}\n"
+                  f"Most Recent Adj: {date_updated}\n"
+                  f"Time of Day: {raw_tod}"
+              )
+
+              coords = [tuple(coord) for coord in geom['coordinates'][0]]
+              poly = kml.newpolygon(
+                  name=display_name,
+                  description=description_text,
+                  outerboundaryis=coords
+              )
+
+              # Define standard web hex colors for CalTopo's ExtendedData
+              ct_green = '#00aa00'
+              ct_purple = '#aa00aa'
+              
+              # Defaults
+              stroke_color = ct_green
+              fill_color = ct_green
+              stroke_width = '2'
+
+              # Standard KML Fallback Colors (AABBGGRR)
+              kml_green_fill = '4D00AA00'
+              kml_green_line = 'FF00AA00'
+              kml_purple_fill = '4DAA00AA'
+              kml_purple_line = 'FFAA00AA'
+
+              if tod_clean == 'day':
+                  stroke_color = ct_green
+                  fill_color = ct_green
+                  poly.style.polystyle.color = kml_green_fill
+                  poly.style.linestyle.color = kml_green_line
+              elif tod_clean == 'night':
+                  stroke_color = ct_purple
+                  fill_color = ct_purple
+                  poly.style.polystyle.color = kml_purple_fill
+                  poly.style.linestyle.color = kml_purple_line
+              elif tod_clean == 'both':
+                  stroke_color = ct_purple   # Purple border
+                  fill_color = ct_green      # Green fill
+                  stroke_width = '3'
+                  poly.style.polystyle.color = kml_green_fill
+                  poly.style.linestyle.color = kml_purple_line
+
+              poly.style.linestyle.width = int(stroke_width)
+
+              # INJECT CALTOPO-SPECIFIC STYLING 
+              # CalTopo natively reads these ExtendedData attributes over standard KML styles
+              poly.extendeddata.newdata('stroke', stroke_color)
+              poly.extendeddata.newdata('fill', fill_color)
+              poly.extendeddata.newdata('fill-opacity', '0.3')
+              poly.extendeddata.newdata('stroke-width', stroke_width)
+              poly.extendeddata.newdata('stroke-opacity', '1.0')
 
           os.makedirs('kmls', exist_ok=True)
           kml.save('w_live.kml')
