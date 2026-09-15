@@ -3,7 +3,7 @@ name: Sync GeoJSON to KML
 on:
   schedule:
     - cron: '0 15,22 * * *'
-  workflow_dispatch:
+  workflow_dispatch: # Allows you to manually trigger it anytime
 
 jobs:
   build:
@@ -25,81 +25,57 @@ jobs:
           python - << 'EOF'
           import requests
           import simplekml
+          import json
           import datetime
           import os
 
+          # Fetch the raw CDFW data
           res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
           data = res.json()
 
-          kml = simplekml.Kml(name="CDFW Wolf Tracker")
+          kml = simplekml.Kml()
 
-          # DEFINE SHARED STYLES AT DOCUMENT LEVEL
-          # KML Hex color structure: AABBGGRR (Alpha, Blue, Green, Red)
+          for feature in data['features']:
+              props = feature['properties']
+              geom = feature['geometry']
+              
+              if geom['type'] == 'Polygon':
+                  # Format properties for CalTopo
+                  name = props.get('name', 'Unknown Wolf')
+                  pack_origin = props.get('pack_origin', 'Unknown Origin')
+                  date_updated = props.get('most_recent_adj', 'N/A')
+                  time_of_day = props.get('time_of_day', 'N/A')
+                  
+                  # Detailed description tag
+                  desc = (
+                      f"Name: {name}\n"
+                      f"Pack Origin: {pack_origin}\n"
+                      f"Most Recent Adj: {date_updated}\n"
+                      f"Time of Day: {time_of_day}"
+                  )
+                  
+                  # Append time_of_day to label so CalTopo treats Day and Night entries as separate features
+                  label_name = f"{name} ({time_of_day})"
 
-          # 1. Day Style (Green fill, Green outline)
-          style_day = simplekml.Style()
-          style_day.polystyle.color = '4D00C000'  # Semi-transparent green
-          style_day.polystyle.fill = 1
-          style_day.polystyle.outline = 1
-          style_day.linestyle.color = 'FF00C000'  # Opaque green outline
-          style_day.linestyle.width = 2
-
-          # 2. Night Style (Purple fill, Purple outline)
-          style_night = simplekml.Style()
-          style_night.polystyle.color = '4DC00080' # Semi-transparent purple
-          style_night.polystyle.fill = 1
-          style_night.polystyle.outline = 1
-          style_night.linestyle.color = 'FFC00080' # Opaque purple outline
-          style_night.linestyle.width = 2
-
-          # 3. Both Style (Green fill, Purple outline)
-          style_both = simplekml.Style()
-          style_both.polystyle.color = '4D00C000'  # Semi-transparent green fill
-          style_both.polystyle.fill = 1
-          style_both.polystyle.outline = 1
-          style_both.linestyle.color = 'FFC00080'  # Opaque purple outline
-          style_both.linestyle.width = 3
-
-          for feature in data.get('features', []):
-              props = feature.get('properties') or {}
-              geom = feature.get('geometry') or {}
-
-              if geom.get('type') != 'Polygon':
-                  continue
-
-              name = props.get('name') or 'Unknown Wolf'
-              pack_origin = props.get('pack_origin') or 'N/A'
-              date_updated = props.get('most_recent_adj') or 'N/A'
-              time_of_day = props.get('time_of_day') or 'N/A'
-
-              # Unique name suffix prevents CalTopo from overwriting duplicate wolf entries
-              tod_label = str(time_of_day).strip().capitalize()
-              display_name = f"{name} - {tod_label}" if tod_label != 'N/A' else name
-
-              description_text = (
-                  f"Name: {name}\n"
-                  f"Pack Origin: {pack_origin}\n"
-                  f"Most Recent Adj: {date_updated}\n"
-                  f"Time of Day: {time_of_day}"
-              )
-
-              # Coordinates tuple mapping (Lon, Lat)
-              coords = [tuple(coord[:2]) for coord in geom['coordinates'][0]]
-
-              poly = kml.newpolygon(
-                  name=display_name,
-                  description=description_text,
-                  outerboundaryis=coords
-              )
-
-              # Assign shared document style reference
-              tod_clean = str(time_of_day).strip().lower()
-              if tod_clean == 'day':
-                  poly.style = style_day
-              elif tod_clean == 'night':
-                  poly.style = style_night
-              elif tod_clean == 'both':
-                  poly.style = style_both
+                  # Create polygon in KML
+                  coords = [tuple(coord) for coord in geom['coordinates'][0]]
+                  poly = kml.newpolygon(name=label_name, description=desc, outerboundaryis=coords)
+                  
+                  # Styling (KML AABBGGRR hex format)
+                  # Green: fill '3300a000', border 'ff00a000'
+                  # Purple: fill '33a000a0', border 'ffa000a0'
+                  if time_of_day == 'day':
+                      poly.style.polystyle.color = '3300a000' # Green fill
+                      poly.style.linestyle.color = 'ff00a000' # Green border
+                      poly.style.linestyle.width = 3
+                  elif time_of_day == 'night':
+                      poly.style.polystyle.color = '33a000a0' # Purple fill
+                      poly.style.linestyle.color = 'ffa000a0' # Purple border
+                      poly.style.linestyle.width = 3
+                  elif time_of_day == 'both':
+                      poly.style.polystyle.color = '3300a000' # Green fill
+                      poly.style.linestyle.color = 'ffa000a0' # Purple border
+                      poly.style.linestyle.width = 3
 
           os.makedirs('kmls', exist_ok=True)
           kml.save('w_live.kml')
