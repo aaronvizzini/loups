@@ -218,12 +218,12 @@
         </Placemark>
         <Placemark id="45">
             <name>CA077; pack origin: Whaleback</name>
-            <description>Last Adjusted: 10/13/2026</description>
+            <description>Last Adjusted: 10/14/2026</description>
             <styleUrl>#48</styleUrl>
             <Polygon id="44">
                 <outerBoundaryIs>
                     <LinearRing id="46">
-                        <coordinates>-121.32411503809348,41.25961594912318,0.0 -121.29119874451507,41.28377245260841,0.0 -121.30139849656962,41.31568930582326,0.0 -121.34453323709009,41.323441753719884,0.0 -121.37743959155782,41.299279749781135,0.0 -121.36722116279581,41.26737080255233,0.0 -121.32411503809348,41.25961594912318,0.0</coordinates>
+                        <coordinates>-121.30139849656962,41.31568930582326,0.0 -121.26845335404708,41.339832443896896,0.0 -121.27865285742055,41.37173352602799,0.0 -121.3218162381502,41.3794835886153,0.0 -121.3547514570922,41.35533495021519,0.0 -121.34453323709009,41.323441753719884,0.0 -121.30139849656962,41.31568930582326,0.0</coordinates>
                     </LinearRing>
                 </outerBoundaryIs>
             </Polygon>
@@ -253,7 +253,7 @@
             </Polygon>
         </Placemark>
         <Placemark id="66">
-            <name>CA146</name>
+            <name>CA121 (previously Whaleback Disperser 1)</name>
             <description>Last Adjusted: 10/14/2026</description>
             <styleUrl>#69</styleUrl>
             <Polygon id="65">
@@ -265,7 +265,7 @@
             </Polygon>
         </Placemark>
         <Placemark id="73">
-            <name>CA121 (previously Whaleback Disperser 1)</name>
+            <name>CA146</name>
             <description>Last Adjusted: 10/14/2026</description>
             <styleUrl>#76</styleUrl>
             <Polygon id="72">
