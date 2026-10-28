@@ -170,7 +170,7 @@
         </Placemark>
         <Placemark id="17">
             <name>CA195</name>
-            <description>Last Adjusted: 10/27/2026</description>
+            <description>Last Adjusted: 10/28/2026</description>
             <styleUrl>#20</styleUrl>
             <Polygon id="16">
                 <outerBoundaryIs>
@@ -218,12 +218,12 @@
         </Placemark>
         <Placemark id="45">
             <name>CA127 (previously Whaleback 2)</name>
-            <description>Last Adjusted: 10/26/2026</description>
+            <description>Last Adjusted: 10/27/2026</description>
             <styleUrl>#48</styleUrl>
             <Polygon id="44">
                 <outerBoundaryIs>
                     <LinearRing id="46">
-                        <coordinates>-121.65015278006467,41.13751724574998,0.0 -121.61742067019124,41.16176150554964,0.0 -121.62769479875159,41.193662190879316,0.0 -121.67071942042553,41.201310569257934,0.0 -121.70344123212739,41.177060865715276,0.0 -121.69314873852771,41.145168231580456,0.0 -121.65015278006467,41.13751724574998,0.0</coordinates>
+                        <coordinates>-121.92152655343698,40.975111751220005,0.0 -121.88896884542613,40.9994364884848,0.0 -121.89929774949681,41.031343953515844,0.0 -121.94220246229668,41.03891850040559,0.0 -121.97474959036425,41.014588362244645,0.0 -121.9644026037536,40.982689082035265,0.0 -121.92152655343698,40.975111751220005,0.0</coordinates>
                     </LinearRing>
                 </outerBoundaryIs>
             </Polygon>
@@ -241,7 +241,7 @@
             </Polygon>
         </Placemark>
         <Placemark id="59">
-            <name>CA147 (previously Whaleback 4)</name>
+            <name>CA121 (previously Whaleback Disperser 1)</name>
             <description>Last Adjusted: 10/27/2026</description>
             <styleUrl>#62</styleUrl>
             <Polygon id="58">
@@ -253,8 +253,8 @@
             </Polygon>
         </Placemark>
         <Placemark id="66">
-            <name>CA121 (previously Whaleback Disperser 1)</name>
-            <description>Last Adjusted: 10/26/2026</description>
+            <name>CA147 (previously Whaleback 4)</name>
+            <description>Last Adjusted: 10/27/2026</description>
             <styleUrl>#69</styleUrl>
             <Polygon id="65">
                 <outerBoundaryIs>
