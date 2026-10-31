@@ -16,12 +16,12 @@
         </Style>
         <Style id="13">
             <LineStyle id="15">
-                <color>ffa000a0</color>
+                <color>ff006600</color>
                 <colorMode>normal</colorMode>
                 <width>3</width>
             </LineStyle>
             <PolyStyle id="14">
-                <color>33a000a0</color>
+                <color>33006600</color>
                 <colorMode>normal</colorMode>
                 <fill>1</fill>
                 <outline>1</outline>
@@ -29,12 +29,12 @@
         </Style>
         <Style id="20">
             <LineStyle id="22">
-                <color>ffa000a0</color>
+                <color>ff660000</color>
                 <colorMode>normal</colorMode>
                 <width>3</width>
             </LineStyle>
             <PolyStyle id="21">
-                <color>33a000a0</color>
+                <color>33660000</color>
                 <colorMode>normal</colorMode>
                 <fill>1</fill>
                 <outline>1</outline>
@@ -42,12 +42,12 @@
         </Style>
         <Style id="27">
             <LineStyle id="29">
-                <color>ffa000a0</color>
+                <color>ff006600</color>
                 <colorMode>normal</colorMode>
                 <width>3</width>
             </LineStyle>
             <PolyStyle id="28">
-                <color>33a000a0</color>
+                <color>33006600</color>
                 <colorMode>normal</colorMode>
                 <fill>1</fill>
                 <outline>1</outline>
@@ -55,12 +55,12 @@
         </Style>
         <Style id="34">
             <LineStyle id="36">
-                <color>ffa000a0</color>
+                <color>ff660000</color>
                 <colorMode>normal</colorMode>
                 <width>3</width>
             </LineStyle>
             <PolyStyle id="35">
-                <color>33a000a0</color>
+                <color>33660000</color>
                 <colorMode>normal</colorMode>
                 <fill>1</fill>
                 <outline>1</outline>
@@ -107,12 +107,12 @@
         </Style>
         <Style id="62">
             <LineStyle id="64">
-                <color>ffa000a0</color>
+                <color>ff006600</color>
                 <colorMode>normal</colorMode>
                 <width>3</width>
             </LineStyle>
             <PolyStyle id="63">
-                <color>33a000a0</color>
+                <color>33006600</color>
                 <colorMode>normal</colorMode>
                 <fill>1</fill>
                 <outline>1</outline>
@@ -120,12 +120,12 @@
         </Style>
         <Style id="69">
             <LineStyle id="71">
-                <color>ffa000a0</color>
+                <color>ff660000</color>
                 <colorMode>normal</colorMode>
                 <width>3</width>
             </LineStyle>
             <PolyStyle id="70">
-                <color>33a000a0</color>
+                <color>33660000</color>
                 <colorMode>normal</colorMode>
                 <fill>1</fill>
                 <outline>1</outline>
@@ -146,12 +146,12 @@
         </Style>
         <Style id="83">
             <LineStyle id="85">
-                <color>ffa000a0</color>
+                <color>ff006600</color>
                 <colorMode>normal</colorMode>
                 <width>3</width>
             </LineStyle>
             <PolyStyle id="84">
-                <color>33a000a0</color>
+                <color>33006600</color>
                 <colorMode>normal</colorMode>
                 <fill>1</fill>
                 <outline>1</outline>
@@ -159,12 +159,12 @@
         </Style>
         <Style id="90">
             <LineStyle id="92">
-                <color>ffa000a0</color>
+                <color>ff660000</color>
                 <colorMode>normal</colorMode>
                 <width>3</width>
             </LineStyle>
             <PolyStyle id="91">
-                <color>33a000a0</color>
+                <color>33660000</color>
                 <colorMode>normal</colorMode>
                 <fill>1</fill>
                 <outline>1</outline>
@@ -197,8 +197,9 @@
             </PolyStyle>
         </Style>
         <Placemark id="3">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 30, 2026</description>
+            <name>CA091 (previously Yowlumni Disperser)</name>
+            <description>Pack Origin: Beyem Seyo
+Last Adjusted: Oct 30, 2026</description>
             <styleUrl>#6</styleUrl>
             <Polygon id="2">
                 <outerBoundaryIs>
@@ -209,8 +210,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="10">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 30, 2026</description>
+            <name>CA195</name>
+            <description>Pack Origin: Long Valley
+Last Adjusted: Oct 30, 2026</description>
             <styleUrl>#13</styleUrl>
             <Polygon id="9">
                 <outerBoundaryIs>
@@ -221,8 +223,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="17">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 30, 2026</description>
+            <name>CA195</name>
+            <description>Pack Origin: Long Valley
+Last Adjusted: Oct 30, 2026</description>
             <styleUrl>#20</styleUrl>
             <Polygon id="16">
                 <outerBoundaryIs>
@@ -233,8 +236,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="24">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 30, 2026</description>
+            <name>CA131</name>
+            <description>Pack Origin: Grizzly
+Last Adjusted: Oct 30, 2026</description>
             <styleUrl>#27</styleUrl>
             <Polygon id="23">
                 <outerBoundaryIs>
@@ -245,8 +249,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="31">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 30, 2026</description>
+            <name>CA131</name>
+            <description>Pack Origin: Grizzly
+Last Adjusted: Oct 30, 2026</description>
             <styleUrl>#34</styleUrl>
             <Polygon id="30">
                 <outerBoundaryIs>
@@ -257,8 +262,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="38">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 29, 2026</description>
+            <name>CA150 (previously Harvey 3)</name>
+            <description>Pack Origin: Harvey
+Last Adjusted: Oct 29, 2026</description>
             <styleUrl>#41</styleUrl>
             <Polygon id="37">
                 <outerBoundaryIs>
@@ -269,8 +275,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="45">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 29, 2026</description>
+            <name>CA107 (previously Harvey 1)</name>
+            <description>Pack Origin: Harvey
+Last Adjusted: Oct 29, 2026</description>
             <styleUrl>#48</styleUrl>
             <Polygon id="44">
                 <outerBoundaryIs>
@@ -281,8 +288,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="52">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 30, 2026</description>
+            <name>CA124 (previously Whaleback Disperser 2)</name>
+            <description>Pack Origin: Whaleback
+Last Adjusted: Oct 30, 2026</description>
             <styleUrl>#55</styleUrl>
             <Polygon id="51">
                 <outerBoundaryIs>
@@ -293,8 +301,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="59">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 28, 2026</description>
+            <name>CA127 (previously Whaleback 2)</name>
+            <description>Pack Origin: Whaleback
+Last Adjusted: Oct 28, 2026</description>
             <styleUrl>#62</styleUrl>
             <Polygon id="58">
                 <outerBoundaryIs>
@@ -305,8 +314,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="66">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 28, 2026</description>
+            <name>CA127 (previously Whaleback 2)</name>
+            <description>Pack Origin: Whaleback
+Last Adjusted: Oct 28, 2026</description>
             <styleUrl>#69</styleUrl>
             <Polygon id="65">
                 <outerBoundaryIs>
@@ -317,8 +327,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="73">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 30, 2026</description>
+            <name>CA077; pack origin: Whaleback</name>
+            <description>Pack Origin: Whaleback
+Last Adjusted: Oct 30, 2026</description>
             <styleUrl>#76</styleUrl>
             <Polygon id="72">
                 <outerBoundaryIs>
@@ -329,8 +340,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="80">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 29, 2026</description>
+            <name>CA146</name>
+            <description>Pack Origin: Whaleback
+Last Adjusted: Oct 29, 2026</description>
             <styleUrl>#83</styleUrl>
             <Polygon id="79">
                 <outerBoundaryIs>
@@ -341,8 +353,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="87">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 29, 2026</description>
+            <name>CA146</name>
+            <description>Pack Origin: Whaleback
+Last Adjusted: Oct 29, 2026</description>
             <styleUrl>#90</styleUrl>
             <Polygon id="86">
                 <outerBoundaryIs>
@@ -353,8 +366,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="94">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 30, 2026</description>
+            <name>CA147 (previously Whaleback 4)</name>
+            <description>Pack Origin: Whaleback
+Last Adjusted: Oct 30, 2026</description>
             <styleUrl>#97</styleUrl>
             <Polygon id="93">
                 <outerBoundaryIs>
@@ -365,8 +379,9 @@
             </Polygon>
         </Placemark>
         <Placemark id="101">
-            <name>Unknown Pack</name>
-            <description>Last Adjusted: Oct 30, 2026</description>
+            <name>CA121 (previously Whaleback Disperser 1)</name>
+            <description>Pack Origin: Whaleback
+Last Adjusted: Oct 30, 2026</description>
             <styleUrl>#104</styleUrl>
             <Polygon id="100">
                 <outerBoundaryIs>
