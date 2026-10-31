@@ -40,18 +40,31 @@ jobs:
               geom = feature['geometry']
               
               if geom['type'] == 'Polygon':
-                  # Format properties for the CalTopo label
-                  pack_name = props.get('pack', 'Unknown Pack')
+                  # Extract properties according to the new schema
+                  pack_name = props.get('name', 'Unknown Pack')
+                  pack_origin = props.get('pack_origin', 'Unknown')
                   date_updated = props.get('most_recent_adj', 'N/A')
+                  time_of_day = props.get('time_of_day', 'both')
+                  
+                  # Format description
+                  description = f'Pack Origin: {pack_origin}\nLast Adjusted: {date_updated}'
                   
                   # Create polygon in KML
-                  # GeoJSON uses [Lon, Lat] -> KML simplekml uses [(Lon, Lat), ...]
                   coords = [tuple(coord) for coord in geom['coordinates'][0]]
-                  poly = kml.newpolygon(name=pack_name, description=f'Last Adjusted: {date_updated}', outerboundaryis=coords)
+                  poly = kml.newpolygon(name=pack_name, description=description, outerboundaryis=coords)
                   
-                  # Style the boundary semi-transparent purple/pink
-                  poly.style.polystyle.color = '33a000a0' # Hex color formatting AABBGGRR
-                  poly.style.linestyle.color = 'ffa000a0'
+                  # Determine colors based on time_of_day (Hex format: AABBGGRR)
+                  # day -> dark green, both -> dark purple, night -> dark blue
+                  if time_of_day == 'day':
+                      poly.style.polystyle.color = '33006600' # Semi-transparent dark green
+                      poly.style.linestyle.color = 'ff006600' # Opaque dark green outline
+                  elif time_of_day == 'night':
+                      poly.style.polystyle.color = '33660000' # Semi-transparent dark blue
+                      poly.style.linestyle.color = 'ff660000' # Opaque dark blue outline
+                  else: # 'both' or default
+                      poly.style.polystyle.color = '33a000a0' # Semi-transparent dark purple
+                      poly.style.linestyle.color = 'ffa000a0' # Opaque dark purple outline
+
                   poly.style.linestyle.width = 3
 
           os.makedirs('kmls', exist_ok=True)
