@@ -1,0 +1,81 @@
+name: Sync GeoJSON to KML
+
+on:
+  schedule:
+    - cron: '0 15,22 * * *'
+  workflow_dispatch: # Allows you to manually trigger it anytime
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install simplekml requests
+
+      - name: Run Data Conversion
+        run: |
+          python - << 'EOF'
+          import requests
+          import simplekml
+          import json
+          import datetime
+          import os
+
+          # Fetch the raw CDFW data
+          res = requests.get('https://storage.googleapis.com/cdfw-wolf-tracker/wolf_bins.geojson')
+          data = res.json()
+
+          kml = simplekml.Kml()
+
+          for feature in data['features']:
+              props = feature['properties']
+              geom = feature['geometry']
+              
+              if geom['type'] == 'Polygon':
+                  # Extract properties according to the new schema
+                  pack_name = props.get('name', 'Unknown Pack')
+                  pack_origin = props.get('pack_origin', 'Unknown')
+                  date_updated = props.get('most_recent_adj', 'N/A')
+                  time_of_day = props.get('time_of_day', 'both')
+                  
+                  # Format description
+                  description = f'Pack Origin: {pack_origin}\nLast Adjusted: {date_updated}'
+                  
+                  # Create polygon in KML
+                  coords = [tuple(coord) for coord in geom['coordinates'][0]]
+                  poly = kml.newpolygon(name=pack_name, description=description, outerboundaryis=coords)
+                  
+                  # Determine colors based on time_of_day (Hex format: AABBGGRR)
+                  # day -> dark green, both -> dark purple, night -> dark blue
+                  if time_of_day == 'day':
+                      poly.style.polystyle.color = '33006600' # Semi-transparent dark green
+                      poly.style.linestyle.color = 'ff006600' # Opaque dark green outline
+                  elif time_of_day == 'night':
+                      poly.style.polystyle.color = '33660000' # Semi-transparent dark blue
+                      poly.style.linestyle.color = 'ff660000' # Opaque dark blue outline
+                  else: # 'both' or default
+                      poly.style.polystyle.color = '33a000a0' # Semi-transparent dark purple
+                      poly.style.linestyle.color = 'ffa000a0' # Opaque dark purple outline
+
+                  poly.style.linestyle.width = 3
+
+          os.makedirs('kmls', exist_ok=True)
+          kml.save('w_live.kml')
+          kml.save(os.path.join('kmls', datetime.datetime.now().strftime('%m-%d-%Y_%H-%M-%S') + '.kml'))
+          EOF
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add w_live.kml kmls/
+          git commit -m "Automated update of wolf tracking data" || exit 0
+          git push
