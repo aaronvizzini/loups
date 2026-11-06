@@ -146,7 +146,7 @@
         </Style>
         <Placemark id="3">
             <name>CA091 (previously Yowlumni Disperser)</name>
-            <description>Last Adjusted: 11/05/2026</description>
+            <description>Last Adjusted: 11/06/2026</description>
             <styleUrl>#6</styleUrl>
             <Polygon id="2">
                 <outerBoundaryIs>
@@ -163,14 +163,14 @@
             <Polygon id="9">
                 <outerBoundaryIs>
                     <LinearRing id="11">
-                        <coordinates>-120.09862051272555,39.50383662116126,0.0 -120.06576438121668,39.52797562468355,0.0 -120.07545751869063,39.56070110906201,0.0 -120.11802577769227,39.56927980165605,0.0 -120.15087373821196,39.54513488758113,0.0 -120.14116162758414,39.51241719578853,0.0 -120.09862051272555,39.50383662116126,0.0</coordinates>
+                        <coordinates>-120.33082987426111,39.61190127027127,0.0 -120.29803486434173,39.63607634852333,0.0 -120.30780135167763,39.668727181994,0.0 -120.35038170286225,39.677195074764825,0.0 -120.38316825095414,39.65301413847316,0.0 -120.37338292668703,39.62037117171774,0.0 -120.33082987426111,39.61190127027127,0.0</coordinates>
                     </LinearRing>
                 </outerBoundaryIs>
             </Polygon>
         </Placemark>
         <Placemark id="17">
             <name>CA131</name>
-            <description>Last Adjusted: 11/05/2026</description>
+            <description>Last Adjusted: 11/06/2026</description>
             <styleUrl>#20</styleUrl>
             <Polygon id="16">
                 <outerBoundaryIs>
@@ -182,7 +182,7 @@
         </Placemark>
         <Placemark id="24">
             <name>CA150 (previously Harvey 3)</name>
-            <description>Last Adjusted: 11/05/2026</description>
+            <description>Last Adjusted: 11/06/2026</description>
             <styleUrl>#27</styleUrl>
             <Polygon id="23">
                 <outerBoundaryIs>
@@ -194,7 +194,7 @@
         </Placemark>
         <Placemark id="31">
             <name>CA107 (previously Harvey 1)</name>
-            <description>Last Adjusted: 11/05/2026</description>
+            <description>Last Adjusted: 11/06/2026</description>
             <styleUrl>#34</styleUrl>
             <Polygon id="30">
                 <outerBoundaryIs>
@@ -206,19 +206,19 @@
         </Placemark>
         <Placemark id="38">
             <name>CA124 (previously Whaleback Disperser 2)</name>
-            <description>Last Adjusted: 11/04/2026</description>
+            <description>Last Adjusted: 11/06/2026</description>
             <styleUrl>#41</styleUrl>
             <Polygon id="37">
                 <outerBoundaryIs>
                     <LinearRing id="39">
-                        <coordinates>-121.52726252047606,40.753663134990056,0.0 -121.49460423056438,40.77793694229943,0.0 -121.50480567789815,40.80999365542342,0.0 -121.54768375452767,40.817768474654414,0.0 -121.58033196970896,40.79348916181908,0.0 -121.57011220094752,40.761440539317555,0.0 -121.52726252047606,40.753663134990056,0.0</coordinates>
+                        <coordinates>-121.63342768582693,40.83326284116961,0.0 -121.60078961545771,40.85754764464479,0.0 -121.6110275018378,40.8895574743927,0.0 -121.65392174164776,40.897274392545604,0.0 -121.6865495970751,40.87298411336086,0.0 -121.67629344566224,40.84098239574861,0.0 -121.63342768582693,40.83326284116961,0.0</coordinates>
                     </LinearRing>
                 </outerBoundaryIs>
             </Polygon>
         </Placemark>
         <Placemark id="45">
             <name>CA077; pack origin: Whaleback</name>
-            <description>Last Adjusted: 11/05/2026</description>
+            <description>Last Adjusted: 11/06/2026</description>
             <styleUrl>#48</styleUrl>
             <Polygon id="44">
                 <outerBoundaryIs>
@@ -235,43 +235,43 @@
             <Polygon id="51">
                 <outerBoundaryIs>
                     <LinearRing id="53">
-                        <coordinates>-121.89454270967559,41.390760178084264,0.0 -121.86183400175551,41.41501847177502,0.0 -121.87219981471908,41.446784656909195,0.0 -121.9152926134884,41.45428446990237,0.0 -121.94799068248896,41.43002080670667,0.0 -121.93760661004522,41.39826270402014,0.0 -121.89454270967559,41.390760178084264,0.0</coordinates>
+                        <coordinates>-122.13984414950045,41.64246303081753,0.0 -122.10716044564948,41.666734921576875,0.0 -122.11761817675229,41.69836543683882,0.0 -122.16077778065524,41.7057159536965,0.0 -122.19345050240781,41.68143876798204,0.0 -122.18297462096429,41.64981636431552,0.0 -122.13984414950045,41.64246303081753,0.0</coordinates>
                     </LinearRing>
                 </outerBoundaryIs>
             </Polygon>
         </Placemark>
         <Placemark id="59">
             <name>CA147 (previously Whaleback 4)</name>
-            <description>Last Adjusted: 11/04/2026</description>
+            <description>Last Adjusted: 11/06/2026</description>
             <styleUrl>#62</styleUrl>
             <Polygon id="58">
                 <outerBoundaryIs>
                     <LinearRing id="60">
-                        <coordinates>-121.8897523077237,41.7488746205873,0.0 -121.85692026275345,41.77307747599169,0.0 -121.86732318447896,41.804716103915695,0.0 -121.9105765687767,41.81214387899311,0.0 -121.943397901449,41.78793568151332,0.0 -121.93297658073121,41.756305055067244,0.0 -121.8897523077237,41.7488746205873,0.0</coordinates>
+                        <coordinates>-121.93452374478755,41.637103547737105,0.0 -121.9017496865632,41.66133306370211,0.0 -121.91215247809633,41.6930037321104,0.0 -121.95534766571393,41.700436846793366,0.0 -121.9881109837516,41.67620199000655,0.0 -121.97768987291462,41.644539363369596,0.0 -121.93452374478755,41.637103547737105,0.0</coordinates>
                     </LinearRing>
                 </outerBoundaryIs>
             </Polygon>
         </Placemark>
         <Placemark id="66">
             <name>CA121 (previously Whaleback Disperser 1)</name>
-            <description>Last Adjusted: 11/05/2026</description>
+            <description>Last Adjusted: 11/06/2026</description>
             <styleUrl>#69</styleUrl>
             <Polygon id="65">
                 <outerBoundaryIs>
                     <LinearRing id="67">
-                        <coordinates>-121.8897523077237,41.7488746205873,0.0 -121.85692026275345,41.77307747599169,0.0 -121.86732318447896,41.804716103915695,0.0 -121.9105765687767,41.81214387899311,0.0 -121.943397901449,41.78793568151332,0.0 -121.93297658073121,41.756305055067244,0.0 -121.8897523077237,41.7488746205873,0.0</coordinates>
+                        <coordinates>-121.93452374478755,41.637103547737105,0.0 -121.9017496865632,41.66133306370211,0.0 -121.91215247809633,41.6930037321104,0.0 -121.95534766571393,41.700436846793366,0.0 -121.9881109837516,41.67620199000655,0.0 -121.97768987291462,41.644539363369596,0.0 -121.93452374478755,41.637103547737105,0.0</coordinates>
                     </LinearRing>
                 </outerBoundaryIs>
             </Polygon>
         </Placemark>
         <Placemark id="73">
             <name>CA146</name>
-            <description>Last Adjusted: 11/05/2026</description>
+            <description>Last Adjusted: 11/06/2026</description>
             <styleUrl>#76</styleUrl>
             <Polygon id="72">
                 <outerBoundaryIs>
                     <LinearRing id="74">
-                        <coordinates>-121.8897523077237,41.7488746205873,0.0 -121.85692026275345,41.77307747599169,0.0 -121.86732318447896,41.804716103915695,0.0 -121.9105765687767,41.81214387899311,0.0 -121.943397901449,41.78793568151332,0.0 -121.93297658073121,41.756305055067244,0.0 -121.8897523077237,41.7488746205873,0.0</coordinates>
+                        <coordinates>-121.93452374478755,41.637103547737105,0.0 -121.9017496865632,41.66133306370211,0.0 -121.91215247809633,41.6930037321104,0.0 -121.95534766571393,41.700436846793366,0.0 -121.9881109837516,41.67620199000655,0.0 -121.97768987291462,41.644539363369596,0.0 -121.93452374478755,41.637103547737105,0.0</coordinates>
                     </LinearRing>
                 </outerBoundaryIs>
             </Polygon>
