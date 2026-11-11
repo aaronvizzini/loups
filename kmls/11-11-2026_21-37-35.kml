@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document id="1">
+        <Style id="6">
+            <LineStyle id="8">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="7">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="13">
+            <LineStyle id="15">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="14">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="20">
+            <LineStyle id="22">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="21">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="27">
+            <LineStyle id="29">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="28">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="34">
+            <LineStyle id="36">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="35">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="41">
+            <LineStyle id="43">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="42">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="48">
+            <LineStyle id="50">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="49">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="55">
+            <LineStyle id="57">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="56">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="62">
+            <LineStyle id="64">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="63">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="69">
+            <LineStyle id="71">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="70">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Style id="76">
+            <LineStyle id="78">
+                <color>ffa000a0</color>
+                <colorMode>normal</colorMode>
+                <width>3</width>
+            </LineStyle>
+            <PolyStyle id="77">
+                <color>33a000a0</color>
+                <colorMode>normal</colorMode>
+                <fill>1</fill>
+                <outline>1</outline>
+            </PolyStyle>
+        </Style>
+        <Placemark id="3">
+            <name>CA091 (previously Yowlumni Disperser)</name>
+            <description>Last Adjusted: 11/11/2026</description>
+            <styleUrl>#6</styleUrl>
+            <Polygon id="2">
+                <outerBoundaryIs>
+                    <LinearRing id="4">
+                        <coordinates>-118.51901234066025,35.959439863476696,0.0 -118.4866357760326,35.98363200153928,0.0 -118.49558461548202,36.017640535882286,0.0 -118.53692885757845,36.027449178689466,0.0 -118.56929955281906,36.003250346631155,0.0 -118.56033189002511,35.9692495701328,0.0 -118.51901234066025,35.959439863476696,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="10">
+            <name>CA195</name>
+            <description>Last Adjusted: 11/10/2026</description>
+            <styleUrl>#13</styleUrl>
+            <Polygon id="9">
+                <outerBoundaryIs>
+                    <LinearRing id="11">
+                        <coordinates>-120.1569055862587,39.700019274343894,0.0 -120.12400977892464,39.72414485797741,0.0 -120.1337375777254,39.75679675259486,0.0 -120.1763802033784,39.76531529097423,0.0 -120.2092677390832,39.74118383032516,0.0 -120.19952093774789,39.708539712640885,0.0 -120.1569055862587,39.700019274343894,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="17">
+            <name>CA131</name>
+            <description>Last Adjusted: 11/11/2026</description>
+            <styleUrl>#20</styleUrl>
+            <Polygon id="16">
+                <outerBoundaryIs>
+                    <LinearRing id="18">
+                        <coordinates>-120.36652219811027,39.86437343739569,0.0 -120.33365988916886,39.88852244651597,0.0 -120.34346051492378,39.92108457956072,0.0 -120.38614237079459,39.929489878477995,0.0 -120.41899613330907,39.905335047540675,0.0 -120.40917660351782,39.87278074378839,0.0 -120.36652219811027,39.86437343739569,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="24">
+            <name>CA150 (previously Harvey 3)</name>
+            <description>Last Adjusted: 11/08/2026</description>
+            <styleUrl>#27</styleUrl>
+            <Polygon id="23">
+                <outerBoundaryIs>
+                    <LinearRing id="25">
+                        <coordinates>-120.76233572457149,40.76354732006766,0.0 -120.7293434255223,40.78765568436633,0.0 -120.7393405745507,40.819845744801434,0.0 -120.78234897710624,40.827919645517674,0.0 -120.8153321009312,40.803805626174544,0.0 -120.80531601516368,40.77162336542632,0.0 -120.76233572457149,40.76354732006766,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="31">
+            <name>CA077; pack origin: Whaleback</name>
+            <description>Last Adjusted: 11/11/2026</description>
+            <styleUrl>#34</styleUrl>
+            <Polygon id="30">
+                <outerBoundaryIs>
+                    <LinearRing id="32">
+                        <coordinates>-121.4000986893688,41.24319549899925,0.0 -121.36722116279581,41.26737080255233,0.0 -121.37743959155782,41.299279749781135,0.0 -121.42055417382218,41.30700546025817,0.0 -121.453421674673,41.282824670342876,0.0 -121.44318463717396,41.25092366044158,0.0 -121.4000986893688,41.24319549899925,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="38">
+            <name>CA107 (previously Harvey 1)</name>
+            <description>Last Adjusted: 11/11/2026</description>
+            <styleUrl>#41</styleUrl>
+            <Polygon id="37">
+                <outerBoundaryIs>
+                    <LinearRing id="39">
+                        <coordinates>-121.27156120221117,41.730532891705394,0.0 -121.23846192657953,41.754605446962884,0.0 -121.24869700600044,41.78636325492897,0.0 -121.29205028110388,41.794040725456426,0.0 -121.32513958369748,41.76996269627979,0.0 -121.31488560265686,41.738212674711605,0.0 -121.27156120221117,41.730532891705394,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="45">
+            <name>CA124 (previously Whaleback Disperser 2)</name>
+            <description>Last Adjusted: 11/11/2026</description>
+            <styleUrl>#48</styleUrl>
+            <Polygon id="44">
+                <outerBoundaryIs>
+                    <LinearRing id="46">
+                        <coordinates>-121.52726252047606,40.753663134990056,0.0 -121.49460423056438,40.77793694229943,0.0 -121.50480567789815,40.80999365542342,0.0 -121.54768375452767,40.817768474654414,0.0 -121.58033196970896,40.79348916181908,0.0 -121.57011220094752,40.761440539317555,0.0 -121.52726252047606,40.753663134990056,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="52">
+            <name>CA127 (previously Whaleback 2)</name>
+            <description>Last Adjusted: 11/10/2026</description>
+            <styleUrl>#55</styleUrl>
+            <Polygon id="51">
+                <outerBoundaryIs>
+                    <LinearRing id="53">
+                        <coordinates>-121.93452374478755,41.637103547737105,0.0 -121.9017496865632,41.66133306370211,0.0 -121.91215247809633,41.6930037321104,0.0 -121.95534766571393,41.700436846793366,0.0 -121.9881109837516,41.67620199000655,0.0 -121.97768987291462,41.644539363369596,0.0 -121.93452374478755,41.637103547737105,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="59">
+            <name>CA146</name>
+            <description>Last Adjusted: 11/11/2026</description>
+            <styleUrl>#62</styleUrl>
+            <Polygon id="58">
+                <outerBoundaryIs>
+                    <LinearRing id="60">
+                        <coordinates>-121.73753624830988,41.782320403367365,0.0 -121.70462491495749,41.80648560779117,0.0 -121.71499082994994,41.83814014803265,0.0 -121.75828663502739,41.84562154691522,0.0 -121.7911874287437,41.82145096991436,0.0 -121.78080297560876,41.789804370692245,0.0 -121.73753624830988,41.782320403367365,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="66">
+            <name>CA121 (previously Whaleback Disperser 1)</name>
+            <description>Last Adjusted: 11/11/2026</description>
+            <styleUrl>#69</styleUrl>
+            <Polygon id="65">
+                <outerBoundaryIs>
+                    <LinearRing id="67">
+                        <coordinates>-121.73753624830988,41.782320403367365,0.0 -121.70462491495749,41.80648560779117,0.0 -121.71499082994994,41.83814014803265,0.0 -121.75828663502739,41.84562154691522,0.0 -121.7911874287437,41.82145096991436,0.0 -121.78080297560876,41.789804370692245,0.0 -121.73753624830988,41.782320403367365,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+        <Placemark id="73">
+            <name>CA147 (previously Whaleback 4)</name>
+            <description>Last Adjusted: 11/11/2026</description>
+            <styleUrl>#76</styleUrl>
+            <Polygon id="72">
+                <outerBoundaryIs>
+                    <LinearRing id="74">
+                        <coordinates>-121.73753624830988,41.782320403367365,0.0 -121.70462491495749,41.80648560779117,0.0 -121.71499082994994,41.83814014803265,0.0 -121.75828663502739,41.84562154691522,0.0 -121.7911874287437,41.82145096991436,0.0 -121.78080297560876,41.789804370692245,0.0 -121.73753624830988,41.782320403367365,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+    </Document>
+</kml>
